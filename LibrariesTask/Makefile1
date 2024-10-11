@@ -1,0 +1,30 @@
+all: myapp
+
+#output file
+EXECUTABLE_NAME = myapp
+
+# Which compiler
+CC = gcc
+
+# Compiler Flags
+CFLAGS = -g -Wall -Werror
+
+# Local Libraries
+MYLIB = mylib.a
+
+# Source file and Objectfiles
+SOURCES = $(wildcard *.c)
+OBJECTS = $(patsubst %.c, %.o, $(SOURCES)) 
+
+myapp: $(OBJECTS) $(MYLIB)
+	$(CC) -o $(EXECUTABLE_NAME) $(OBJECTS) $(MYLIB)
+
+$(MYLIB): $(OBJECTS)
+	ar rc $(MYLIB) $(OBJECTS)	
+	
+%.o : %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	-rm $(OBJECTS) $(MYLIB) $(EXECUTABLE_NAME)
+
